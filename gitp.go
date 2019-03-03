@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kako-jun/gitp/gitp-modules"
+	"github.com/kako-jun/gitp/gitp-core"
 )
 
 func parseArgs() (gitpCommand string, allRepo bool, repo string, gitCommandAndArgs []string, err error) {
