@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"./cdand"
+	"github.com/kako-jun/cdand/cdand-modules"
 )
 
 // for json
