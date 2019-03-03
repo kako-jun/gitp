@@ -72,7 +72,8 @@ func (gitp GitP) getConfigRepo(repo string, configRepos []Repo) (configRepoRetur
 
 func (gitp GitP) clone(repo Repo) (err error) {
 	if gitp.exists(repo.Name) {
-		err = errors.New(repo.Name + " already exists")
+		fmt.Println(repo.Name + " already exists")
+		// err = errors.New(repo.Name + " already exists")
 		return
 	}
 
