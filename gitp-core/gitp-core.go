@@ -1,4 +1,4 @@
-// gitp is ***
+// Package gitp is ***
 package gitp
 
 import (
@@ -13,7 +13,7 @@ import (
 	"github.com/kako-jun/cdand/cdand-core"
 )
 
-// for json
+// Repo for json
 type Repo struct {
 	Name    string `json:"name"`
 	Remotes struct {
@@ -29,11 +29,13 @@ type Repo struct {
 	Enabled bool `json:"enabled"`
 }
 
+// User for json
 type User struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
 
+// Config for json
 type Config struct {
 	Repos    []Repo `json:"repos"`
 	Comments struct {
@@ -79,10 +81,10 @@ func (gitp GitP) clone(repo Repo) (err error) {
 
 	if repo.Remotes.Origin.SSH != "" {
 		fmt.Println("git", "clone", repo.Remotes.Origin.SSH)
-		err = cdand.Exec(".", "git", []string{"clone", repo.Remotes.Origin.SSH})
+		err = cdand.Exec(".", "git", "clone", repo.Remotes.Origin.SSH)
 	} else if repo.Remotes.Origin.HTTPS != "" {
 		fmt.Println("git", "clone", repo.Remotes.Origin.HTTPS)
-		err = cdand.Exec(".", "git", []string{"clone", repo.Remotes.Origin.HTTPS})
+		err = cdand.Exec(".", "git", "clone", repo.Remotes.Origin.HTTPS)
 	}
 
 	return
@@ -96,10 +98,10 @@ func (gitp GitP) addRemote(repo Repo) (err error) {
 
 	if repo.Remotes.Second.SSH != "" {
 		fmt.Println("git", "remote", "add", "second", repo.Remotes.Second.SSH)
-		err = cdand.Exec(repo.Name, "git", []string{"remote", "add", "second", repo.Remotes.Second.SSH})
+		err = cdand.Exec(repo.Name, "git", "remote", "add", "second", repo.Remotes.Second.SSH)
 	} else if repo.Remotes.Second.HTTPS != "" {
 		fmt.Println("git", "remote", "add", "second", repo.Remotes.Second.HTTPS)
-		err = cdand.Exec(repo.Name, "git", []string{"remote", "add", "second", repo.Remotes.Second.HTTPS})
+		err = cdand.Exec(repo.Name, "git", "remote", "add", "second", repo.Remotes.Second.HTTPS)
 	}
 
 	return
@@ -113,12 +115,12 @@ func (gitp GitP) configUser(repo Repo, user User) (err error) {
 
 	if user.Name != "" {
 		fmt.Println("git", "config", "user.name", user.Name)
-		err = cdand.Exec(repo.Name, "git", []string{"config", "user.name", user.Name})
+		err = cdand.Exec(repo.Name, "git", "config", "user.name", user.Name)
 	}
 
 	if user.Email != "" {
 		fmt.Println("git", "config", "user.email", user.Email)
-		err = cdand.Exec(repo.Name, "git", []string{"config", "user.email", user.Email})
+		err = cdand.Exec(repo.Name, "git", "config", "user.email", user.Email)
 	}
 
 	return
@@ -131,12 +133,12 @@ func (gitp GitP) pull(repo Repo) (err error) {
 	}
 
 	fmt.Println("git", "pull", "origin", "master")
-	err = cdand.Exec(repo.Name, "git", []string{"pull", "origin", "master"})
+	err = cdand.Exec(repo.Name, "git", "pull", "origin", "master")
 
 	if repo.Remotes.Second.SSH != "" || repo.Remotes.Second.HTTPS != "" {
 		fmt.Println("")
 		fmt.Println("git", "pull", "second", "master")
-		err = cdand.Exec(repo.Name, "git", []string{"pull", "second", "master"})
+		err = cdand.Exec(repo.Name, "git", "pull", "second", "master")
 	}
 
 	return
@@ -149,38 +151,38 @@ func (gitp GitP) push(repo Repo, defaultComment string) (err error) {
 	}
 
 	fmt.Println("git", "add", "-A")
-	err = cdand.Exec(repo.Name, "git", []string{"add", "-A"})
+	err = cdand.Exec(repo.Name, "git", "add", "-A")
 
 	fmt.Println("git", "commit", "-m", defaultComment)
-	err = cdand.Exec(repo.Name, "git", []string{"commit", "-m", defaultComment})
+	err = cdand.Exec(repo.Name, "git", "commit", "-m", defaultComment)
 
 	fmt.Println("git", "push", "origin", "master")
-	err = cdand.Exec(repo.Name, "git", []string{"push", "origin", "master"})
+	err = cdand.Exec(repo.Name, "git", "push", "origin", "master")
 
 	if repo.Remotes.Second.SSH != "" || repo.Remotes.Second.HTTPS != "" {
 		fmt.Println("")
 		fmt.Println("git", "push", "second", "master")
-		err = cdand.Exec(repo.Name, "git", []string{"push", "second", "master"})
+		err = cdand.Exec(repo.Name, "git", "push", "second", "master")
 	}
 
 	return
 }
 
-func (gitp GitP) gitCommand(repo string, gitCommandAndArgs []string) (err error) {
+func (gitp GitP) gitCommand(repo string, gitCommandAndArgs ...string) (err error) {
 	if !gitp.exists(repo) {
 		err = errors.New(repo + " not found")
 		return
 	}
 
 	fmt.Println("git", strings.Join(gitCommandAndArgs, " "))
-	err = cdand.Exec(repo, "git", gitCommandAndArgs)
+	err = cdand.Exec(repo, "git", gitCommandAndArgs...)
 	return
 }
 
-func (gitp GitP) Start(gitpCommand string, allRepo bool, repo string, gitCommandAndArgs []string) (err error) {
-	config_file_path := "./gitp_config.json"
+func (gitp GitP) start(gitpCommand string, allRepo bool, repo string, gitCommandAndArgs ...string) (err error) {
+	configFilePath := "./gitp_config.json"
 
-	jsonBytes, err := ioutil.ReadFile(config_file_path)
+	jsonBytes, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -194,7 +196,7 @@ func (gitp GitP) Start(gitpCommand string, allRepo bool, repo string, gitCommand
 		if gitpCommand != "" {
 			// gitp clone
 			for _, configRepo := range config.Repos {
-				err = gitp.Start(gitpCommand, false, configRepo.Name, gitCommandAndArgs)
+				err = gitp.start(gitpCommand, false, configRepo.Name, gitCommandAndArgs...)
 				if err != nil {
 					return
 				}
@@ -207,7 +209,7 @@ func (gitp GitP) Start(gitpCommand string, allRepo bool, repo string, gitCommand
 					fmt.Println("[" + configRepo.Name + "]")
 					fmt.Println("")
 
-					err = gitp.gitCommand(configRepo.Name, gitCommandAndArgs)
+					err = gitp.gitCommand(configRepo.Name, gitCommandAndArgs...)
 				}
 			}
 		}
@@ -241,7 +243,7 @@ func (gitp GitP) Start(gitpCommand string, allRepo bool, repo string, gitCommand
 			fmt.Println("[" + repo + "]")
 			fmt.Println("")
 
-			err = gitp.gitCommand(repo, gitCommandAndArgs)
+			err = gitp.gitCommand(repo, gitCommandAndArgs...)
 		}
 	}
 
@@ -249,9 +251,9 @@ func (gitp GitP) Start(gitpCommand string, allRepo bool, repo string, gitCommand
 }
 
 // Exec is ***
-func Exec(gitpCommand string, allRepo bool, repo string, gitCommandAndArgs []string) (errReturn error) {
+func Exec(gitpCommand string, allRepo bool, repo string, gitCommandAndArgs ...string) (errReturn error) {
 	gitp := new(GitP)
-	if err := gitp.Start(gitpCommand, allRepo, repo, gitCommandAndArgs); err != nil {
+	if err := gitp.start(gitpCommand, allRepo, repo, gitCommandAndArgs...); err != nil {
 		fmt.Println("error:", err)
 		errReturn = errors.New("error")
 		return

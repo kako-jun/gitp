@@ -152,5 +152,5 @@ func main() {
 		return
 	}
 
-	gitp.Exec(gitpCommand, allRepo, repo, gitCommandAndArgs)
+	gitp.Exec(gitpCommand, allRepo, repo, gitCommandAndArgs...)
 }
