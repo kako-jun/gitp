@@ -4,22 +4,35 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/kako-jun/gitp/gitp-core"
 )
 
+var Version string = "1.0.0"
+
 func parseArgs() (gitpCommand string, allRepo bool, repo string, gitCommandAndArgs []string, err error) {
 	var (
-		all = flag.Bool("a", false, "target all repositories")
+		versionFlag bool
+		allFlag     bool
 	)
+
+	flag.BoolVar(&versionFlag, "version", false, "print version number")
+	flag.BoolVar(&allFlag, "all", false, "target all repositories")
+	flag.BoolVar(&allFlag, "a", false, "target all repositories")
 
 	flag.Parse()
 	args := flag.Args()
 	// fmt.Println(args)
 	// fmt.Println(*all)
 
-	allRepo = *all
+	if versionFlag {
+		fmt.Println(Version)
+		os.Exit(0)
+	}
+
+	allRepo = allFlag
 	if allRepo {
 		gitCommandAndArgs = args
 
