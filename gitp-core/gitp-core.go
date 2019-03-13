@@ -90,8 +90,8 @@ func (gitp GitP) init(configFilePath string) (err error) {
 		log.Fatal(err)
 	}
 
-	var jsonBuffer bytes.Buffer
-	err = json.Indent(&jsonBuffer, jsonBytes, "", "  ")
+	jsonBuffer := new(bytes.Buffer)
+	err = json.Indent(jsonBuffer, jsonBytes, "", "  ")
 	if err != nil {
 		log.Fatal(err)
 	}
