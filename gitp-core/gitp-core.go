@@ -87,13 +87,13 @@ func (gitp GitP) init(configFilePath string) (err error) {
 
 	jsonBytes, err := json.Marshal(&config)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	var jsonBuffer bytes.Buffer
 	err = json.Indent(&jsonBuffer, jsonBytes, "", "  ")
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	err = ioutil.WriteFile(configFilePath, jsonBuffer.Bytes(), os.ModePerm)
