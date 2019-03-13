@@ -2,6 +2,7 @@
 package gitp
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -67,6 +68,37 @@ func (gitp GitP) getConfigRepo(repo string, configRepos []Repo) (configRepoRetur
 				result = true
 			}
 		}
+	}
+
+	return
+}
+
+func (gitp GitP) init(configFilePath string) (err error) {
+	if gitp.exists(configFilePath) {
+		err = errors.New(configFilePath + " already exists")
+		return
+	}
+
+	var config Config
+	var repo1 Repo
+	config.Repos = append(config.Repos, repo1)
+	var repo2 Repo
+	config.Repos = append(config.Repos, repo2)
+
+	jsonBytes, err := json.Marshal(&config)
+	if err != nil {
+		panic(err)
+	}
+
+	var jsonBuffer bytes.Buffer
+	err = json.Indent(&jsonBuffer, jsonBytes, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+
+	err = ioutil.WriteFile(configFilePath, jsonBuffer.Bytes(), os.ModePerm)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	return
@@ -181,6 +213,16 @@ func (gitp GitP) gitCommand(repo string, gitCommandAndArgs ...string) (err error
 
 func (gitp GitP) start(gitpCommand string, allRepo bool, repo string, gitCommandAndArgs ...string) (err error) {
 	configFilePath := "./gitp_config.json"
+
+	if gitpCommand == "init" {
+		// gitp init
+		err = gitp.init(configFilePath)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		return
+	}
 
 	jsonBytes, err := ioutil.ReadFile(configFilePath)
 	if err != nil {

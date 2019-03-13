@@ -46,7 +46,7 @@ func parseArgs() (gitpCommand string, allRepo bool, repo string, gitCommandAndAr
 	if flag.NArg() >= 1 {
 		commandOrRepo := args[0]
 		switch commandOrRepo {
-		case "clone", "remote", "config", "pull", "push":
+		case "init", "clone", "remote", "config", "pull", "push":
 			gitpCommand = commandOrRepo
 		default:
 			repo = commandOrRepo
@@ -131,7 +131,7 @@ func parseArgs() (gitpCommand string, allRepo bool, repo string, gitCommandAndAr
 	}
 
 	switch gitpCommand {
-	case "", "clone", "remote add", "config user", "pull", "push":
+	case "", "init", "clone", "remote add", "config user", "pull", "push":
 	default:
 		err = errors.New("invalid argument")
 		return
@@ -146,6 +146,7 @@ func main() {
 	if err != nil {
 		fmt.Println("error:", err)
 		fmt.Println("usage:")
+		fmt.Println("  gitp init")
 		fmt.Println("  gitp clone")
 		fmt.Println("  gitp remote add")
 		fmt.Println("  gitp config user")
