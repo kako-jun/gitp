@@ -230,7 +230,7 @@ $ gitp [repository name] remote add public
 ##### e.g. 複数のリポジトリの変更状態をまとめて確認できる
 
 ```sh
-$ gitp -a git status
+$ gitp -a status
 ```
 
 で可能です
