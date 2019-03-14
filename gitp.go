@@ -10,6 +10,7 @@ import (
 	"github.com/kako-jun/gitp/gitp-core"
 )
 
+// app version
 var Version string = "1.0.0"
 
 func parseArgs() (gitpCommand string, allRepo bool, repo string, gitCommandAndArgs []string, err error) {
