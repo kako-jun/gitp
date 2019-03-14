@@ -83,13 +83,13 @@ $ gitp push
 
 ### Download binaries
 
-- Windows: [gitp.zip](https://github.com/kako-jun/gitp/raw/master/bin/windows/gitp.zip)
-- macOS: [gitp.dmg](https://github.com/kako-jun/gitp/raw/master/bin/mac/gitp.dmg)
+- Windows: [gitp_win.zip](https://github.com/kako-jun/gitp/releases/latest)
+- macOS: [gitp_mac.dmg](https://github.com/kako-jun/gitp/releases/latest)
 - Linux ( `chmod u+x gitp` required)
 
-    - x64: [gitp_amd64.tar.gz](https://github.com/kako-jun/gitp/raw/master/bin/linux/gitp_amd64.tar.gz)
-    - ARM: [gitp_arm64.tar.gz](https://github.com/kako-jun/gitp/raw/master/bin/linux/gitp_arm64.tar.gz)
-    - Raspberry Pi: [gitp_armv7l.tar.gz](https://github.com/kako-jun/gitp/raw/master/bin/linux/gitp_armv7l.tar.gz)
+    - x64: [gitp_linux_amd64.tar.gz](https://github.com/kako-jun/gitp/releases/latest)
+    - ARM: [gitp_linux_arm64.tar.gz](https://github.com/kako-jun/gitp/releases/latest)
+    - Raspberry Pi: [gitp_linux_armv7l.tar.gz](https://github.com/kako-jun/gitp/releases/latest)
 
 ### go get
 
