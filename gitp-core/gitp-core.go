@@ -244,14 +244,11 @@ func (gitp GitP) start(gitpCommand string, allRepo bool, repo string, gitCommand
 				}
 			}
 		} else {
-			// gitp -a [any git command]
+			// gitp -a [every git command]
 			for _, configRepo := range config.Repos {
-				if configRepo.Enabled {
-					gitp.saw()
-					fmt.Println("[" + configRepo.Name + "]")
-					fmt.Println("")
-
-					err = gitp.gitCommand(configRepo.Name, gitCommandAndArgs...)
+				err = gitp.start(gitpCommand, false, configRepo.Name, gitCommandAndArgs...)
+				if err != nil {
+					return
 				}
 			}
 		}
@@ -280,12 +277,15 @@ func (gitp GitP) start(gitpCommand string, allRepo bool, repo string, gitCommand
 				}
 			}
 		} else {
-			// gitp [repository name] [any git command]
-			gitp.saw()
-			fmt.Println("[" + repo + "]")
-			fmt.Println("")
+			// gitp [repository name] [every git command]
+			_, result := gitp.getConfigRepo(repo, config.Repos)
+			if result {
+				gitp.saw()
+				fmt.Println("[" + repo + "]")
+				fmt.Println("")
 
-			err = gitp.gitCommand(repo, gitCommandAndArgs...)
+				err = gitp.gitCommand(repo, gitCommandAndArgs...)
+			}
 		}
 	}
 

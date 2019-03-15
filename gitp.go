@@ -160,9 +160,9 @@ func main() {
 		fmt.Println("  gitp pull [repository name]")
 		fmt.Println("  gitp push [repository name]")
 		fmt.Println("")
-		fmt.Println("  gitp -a [any git command]")
+		fmt.Println("  gitp -a [every git command]")
 		fmt.Println("    e.g.  gitp -a checkout .")
-		fmt.Println("  gitp [repository name] [any git command]")
+		fmt.Println("  gitp [repository name] [every git command]")
 		fmt.Println("    e.g.  gitp [repository name] checkout .")
 		return
 	}
