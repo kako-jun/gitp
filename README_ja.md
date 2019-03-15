@@ -119,36 +119,43 @@ $ go get github.com/kako-jun/gitp
     "repos": [
         {
             "enabled": true,
-            "name": "gist-exporter",
+            "name": "repository1",
             "remotes": {
                 "origin": {
-                    "ssh": "git@ssh.dev.azure.com:v3/kako-jun/gist-exporter/gist-exporter",
-                    "https": "https://kako-jun@dev.azure.com/kako-jun/gist-exporter/_git/gist-exporter"
+                    "ssh": "git@github.com:kako-jun/repository1.git",
+                    "https": "https://github.com/kako-jun/repository1.git"
                 },
                 "second": {
-                    "ssh": "git@github.com:kako-jun/gist-exporter.git",
-                    "https": "https://github.com/kako-jun/gist-exporter.git"
+                    "ssh": "git@ssh.dev.azure.com:v3/kako-jun/repository1/repository1",
+                    "https": "https://kako-jun@dev.azure.com/kako-jun/repository1/_git/repository1"
                 }
             }
         },
         {
-            "enabled": false,
-            "name": "benford",
+            "enabled": true,
+            "name": "repository2",
             "remotes": {
                 "origin": {
-                    "ssh": "git@github.com:kako-jun/benford.git"
+                    "ssh": "git@github.com:kako-jun/repository2.git"
                 }
             }
-        }
+        },
+        ...
     ]
 }
 ```
 
 次に、`gitp clone` を実行します
 
-TREE gitp_config.json
+ディレクトリは
 
-の状態になります
+    repos
+    ├── gitp_config.json
+    ├── repository1/
+    ├── repository2/
+    └── ...
+
+のような状態になります
 
 これで準備完了です
 
