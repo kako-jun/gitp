@@ -13,13 +13,13 @@ pub fn git_clone(repo_name: &str) -> String {
     result
 }
 
-pub fn exec_git_command(sub_cmd: &str) -> String {
+fn exec_git_command(sub_cmd: &str) -> String {
     let full_cmd = format!("git {}", sub_cmd);
     let result = exec_command(&full_cmd);
     result
 }
 
-pub fn exec_command(cmd: &str) -> String {
+fn exec_command(cmd: &str) -> String {
     let mut child = Command::new("cmd")
         .args(["/C", cmd])
         .stdout(Stdio::piped())

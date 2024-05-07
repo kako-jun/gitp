@@ -1,0 +1,10 @@
+user:
+  name: kako-jun
+  email: 3541096+kako-jun@users.noreply.github.com
+comments:
+  default: update.
+repos:
+  - enabled: true
+    remote: git@github.com:kako-jun/gitp.git
+    branch: main
+    group: "2024"

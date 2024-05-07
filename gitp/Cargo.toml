@@ -5,3 +5,5 @@ edition = "2021"
 
 [dependencies]
 encoding_rs = "0.8.34"
+serde = { version = "1.0.200", features = ["derive"] }
+serde_yaml = "0.9.34"
