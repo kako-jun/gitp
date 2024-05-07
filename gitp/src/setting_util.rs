@@ -11,9 +11,9 @@ struct User {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-struct Repos {
+pub struct Repos {
     enabled: bool,
-    remote: String,
+    pub remote: String,
     branch: String,
     group: String,
 }
@@ -22,7 +22,7 @@ struct Repos {
 pub struct GitpSetting {
     user: User,
     comments: HashMap<String, String>,
-    repos: Vec<Repos>,
+    pub repos: Vec<Repos>,
 }
 
 impl GitpSetting {
