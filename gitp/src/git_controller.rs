@@ -42,10 +42,33 @@ impl GitController {
         result
     }
 
-    pub fn git_clone(&self, repo_name: &str) -> String {
-        let sub_command: String = format!("clone {}", repo_name);
+    pub fn git_clone(&self, repo_name: &str, branch: &str) -> String {
+        let sub_command: String = format!("clone {} -b {}", repo_name, branch);
         let result = self.exec_git_command(&sub_command);
         result
+    }
+
+    pub fn git_pull(&self) -> String {
+        let sub_command = "pull";
+        let result = self.exec_git_command(sub_command);
+        result
+    }
+
+    pub fn git_push(&self, commit_message: &str) -> String {
+        self.exec_git_command("add -A");
+        let commit_cmd = format!("commit -m \"{}\"", commit_message);
+        self.exec_git_command(&commit_cmd);
+        let result = self.exec_git_command("push");
+        result
+    }
+
+    pub fn git_config(&self, name: &str, email: &str) {
+        self.exec_git_command(&format!("config user.name \"{}\"", name));
+        self.exec_git_command(&format!("config user.email \"{}\"", email));
+    }
+
+    pub fn git_config_raw(&self, key: &str, value: &str) {
+        self.exec_git_command(&format!("config {} \"{}\"", key, value));
     }
 
     fn exec_git_command(&self, sub_command: &str) -> String {
