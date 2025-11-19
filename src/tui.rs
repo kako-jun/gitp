@@ -77,7 +77,7 @@ impl TuiApp {
         terminal.show_cursor()?;
 
         if let Err(err) = res {
-            println!("{:?}", err);
+            println!("{err:?}");
         }
 
         Ok(())
@@ -93,9 +93,9 @@ impl TuiApp {
 
             // Check if all repos are done
             let repos = self.repos.lock().unwrap();
-            let all_done = repos.iter().all(|r| {
-                r.status == RepoStatus::Success || r.status == RepoStatus::Failed
-            });
+            let all_done = repos
+                .iter()
+                .all(|r| r.status == RepoStatus::Success || r.status == RepoStatus::Failed);
             drop(repos);
 
             if all_done {
@@ -130,10 +130,19 @@ impl TuiApp {
 
         // Header
         let header = Paragraph::new(vec![Line::from(vec![
-            Span::styled("gitp", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+            Span::styled(
+                "gitp",
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::BOLD),
+            ),
             Span::raw(" - Git Multiple Repository Manager"),
         ])])
-        .block(Block::default().borders(Borders::ALL).style(Style::default()));
+        .block(
+            Block::default()
+                .borders(Borders::ALL)
+                .style(Style::default()),
+        );
         f.render_widget(header, chunks[0]);
 
         // Repository list
@@ -158,18 +167,21 @@ impl TuiApp {
 
         let footer = Paragraph::new(Line::from(vec![
             Span::styled("Total: ", Style::default().fg(Color::White)),
-            Span::styled(format!("{} ", total), Style::default().fg(Color::Cyan)),
+            Span::styled(format!("{total} "), Style::default().fg(Color::Cyan)),
             Span::raw("| "),
             Span::styled("Completed: ", Style::default().fg(Color::White)),
-            Span::styled(format!("{} ", completed), Style::default().fg(Color::Yellow)),
+            Span::styled(format!("{completed} "), Style::default().fg(Color::Yellow)),
             Span::raw("| "),
             Span::styled("Success: ", Style::default().fg(Color::White)),
-            Span::styled(format!("{} ", success), Style::default().fg(Color::Green)),
+            Span::styled(format!("{success} "), Style::default().fg(Color::Green)),
             Span::raw("| "),
             Span::styled("Failed: ", Style::default().fg(Color::White)),
-            Span::styled(format!("{} ", failed), Style::default().fg(Color::Red)),
+            Span::styled(format!("{failed} "), Style::default().fg(Color::Red)),
             Span::raw("| "),
-            Span::styled("Press 'q' to force quit", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "Press 'q' to force quit",
+                Style::default().fg(Color::DarkGray),
+            ),
         ]))
         .block(Block::default().borders(Borders::ALL));
         f.render_widget(footer, chunks[2]);
@@ -189,8 +201,10 @@ impl TuiApp {
 
             lines.push(Line::from(vec![
                 Span::styled(
-                    format!(" {} ", status_icon),
-                    Style::default().fg(status_color).add_modifier(Modifier::BOLD),
+                    format!(" {status_icon} "),
+                    Style::default()
+                        .fg(status_color)
+                        .add_modifier(Modifier::BOLD),
                 ),
                 Span::styled(
                     format!("{:40}", repo.name),
