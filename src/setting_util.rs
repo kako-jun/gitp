@@ -44,8 +44,7 @@ impl GitpSetting {
 // pub fn load(mut gitp_setting: GitpSetting) -> Result<GitpSetting, Box<dyn Error>> {
 pub fn load() -> Result<GitpSetting, Box<dyn Error>> {
     // Try .yaml first, then .yml (same logic as gitp.sh)
-    let file_result = File::open("gitp_setting.yaml")
-        .or_else(|_| File::open("gitp_setting.yml"));
+    let file_result = File::open("gitp_setting.yaml").or_else(|_| File::open("gitp_setting.yml"));
 
     let mut file = match file_result {
         Ok(f) => f,

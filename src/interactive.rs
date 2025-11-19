@@ -73,7 +73,7 @@ impl Highlighter for GitpHelper {
     fn highlight<'l>(&self, line: &'l str, _pos: usize) -> Cow<'l, str> {
         // Simple syntax highlighting
         if self.commands.iter().any(|c| c == line) {
-            Cow::Owned(format!("\x1b[1;36m{}\x1b[0m", line)) // Cyan for valid commands
+            Cow::Owned(format!("\x1b[1;36m{line}\x1b[0m")) // Cyan for valid commands
         } else {
             Cow::Borrowed(line)
         }
@@ -104,7 +104,9 @@ pub fn run_interactive_mode() -> rustyline::Result<Vec<String>> {
     let _ = rl.load_history(&history_file);
 
     println!("\x1b[1;36mgitp\x1b[0m - Git Multiple Repository Manager");
-    println!("Type '\x1b[1;33mhelp\x1b[0m' for available commands, '\x1b[1;33mexit\x1b[0m' to quit\n");
+    println!(
+        "Type '\x1b[1;33mhelp\x1b[0m' for available commands, '\x1b[1;33mexit\x1b[0m' to quit\n"
+    );
 
     loop {
         let readline = rl.readline("\x1b[1;36mgitp>\x1b[0m ");
@@ -145,7 +147,7 @@ pub fn run_interactive_mode() -> rustyline::Result<Vec<String>> {
                 break;
             }
             Err(err) => {
-                eprintln!("Error: {:?}", err);
+                eprintln!("Error: {err:?}");
                 break;
             }
         }

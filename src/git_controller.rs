@@ -1,5 +1,4 @@
-use std::io::Read;
-use std::process::{Command, Stdio};
+use std::process::Command;
 
 // trait GitControllerInterface {
 //     fn new() -> Self;
@@ -31,82 +30,54 @@ impl GitController {
             println!("Running on an unknown OS.");
         }
 
-        GitController {
-            encoding: encoding,
-        }
+        GitController { encoding }
     }
 
+    #[allow(dead_code)]
     pub fn git_status(&self) -> String {
-        let sub_command = "status";
-        let result = self.exec_git_command(sub_command);
-        result
+        self.exec_git_command("status")
     }
 
     pub fn git_clone(&self, repo_name: &str, branch: &str) -> String {
-        let sub_command: String = format!("clone {} -b {}", repo_name, branch);
-        let result = self.exec_git_command(&sub_command);
-        result
+        let sub_command: String = format!("clone {repo_name} -b {branch}");
+        self.exec_git_command(&sub_command)
     }
 
     pub fn git_pull(&self) -> String {
-        let sub_command = "pull";
-        let result = self.exec_git_command(sub_command);
-        result
+        self.exec_git_command("pull")
     }
 
     pub fn git_push(&self, commit_message: &str) -> String {
         self.exec_git_command("add -A");
-        let commit_cmd = format!("commit -m \"{}\"", commit_message);
+        let commit_cmd = format!("commit -m \"{commit_message}\"");
         self.exec_git_command(&commit_cmd);
-        let result = self.exec_git_command("push");
-        result
+        self.exec_git_command("push")
     }
 
     pub fn git_config(&self, name: &str, email: &str) {
-        self.exec_git_command(&format!("config user.name \"{}\"", name));
-        self.exec_git_command(&format!("config user.email \"{}\"", email));
+        self.exec_git_command(&format!("config user.name \"{name}\""));
+        self.exec_git_command(&format!("config user.email \"{email}\""));
     }
 
     pub fn git_config_raw(&self, key: &str, value: &str) {
-        self.exec_git_command(&format!("config {} \"{}\"", key, value));
+        self.exec_git_command(&format!("config {key} \"{value}\""));
     }
 
     fn exec_git_command(&self, sub_command: &str) -> String {
         let sub_commands = sub_command.split(' ').collect();
-        let result = self.exec_command("git", sub_commands);
-        result
+        self.exec_command("git", sub_commands)
     }
 
     pub fn exec_command(&self, cmd: &str, args: Vec<&str>) -> String {
-        println!("{}", cmd);
-        // let mut child = Command::new("cmd")
-        //     .args(["/C", cmd])
-        let mut child = Command::new(cmd)
-            .args(args)
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .spawn()
-            .unwrap();
+        println!("{cmd}");
 
-        let stdout = child.stdout.as_mut().unwrap();
-        let stderr = child.stderr.as_mut().unwrap();
+        let output = Command::new(cmd).args(args).output().unwrap();
 
-        let mut stdout_buffer = Vec::new();
-        let mut stderr_buffer = Vec::new();
-
-        loop {
-            let stdout_available = stdout.read_to_end(&mut stdout_buffer).unwrap();
-            let stderr_available = stderr.read_to_end(&mut stderr_buffer).unwrap();
-            if stdout_available == 0 && stderr_available == 0 {
-                break;
-            }
-        }
-
-        let (stdout_result, _, _) = self.encoding.decode(&stdout_buffer);
-        let (stderr_result, _, _) = self.encoding.decode(&stderr_buffer);
+        let (stdout_result, _, _) = self.encoding.decode(&output.stdout);
+        let (stderr_result, _, _) = self.encoding.decode(&output.stderr);
 
         let mut result = stdout_result.to_string();
-        result.push_str(&stderr_result.to_string());
+        result.push_str(stderr_result.as_ref());
 
         result
     }
